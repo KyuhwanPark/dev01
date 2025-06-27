@@ -4,7 +4,9 @@ pipeline {
     stages {
         stage('Git Checkout') {
             steps {
-                git 'https://github.com/KyuhwanPark/dev01.git'
+                git branch: "${GIT_BRANCH}",
+                    url: "${GIT_REPO}",
+                    credentialsId: 'github-pat' // 이 부분을 추가!
             }
         }
 
