@@ -1,11 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'docker:24.0.0-dind'
-            // Docker 데몬에 접근하기 위해 소켓 마운트 및 privileged 모드로 실행
-            args  '-v /var/run/docker.sock:/var/run/docker.sock --privileged'
-        }
-    }
+    agent any
 
     environment {
         GIT_REPO        = 'https://github.com/KyuhwanPark/dev01.git'
@@ -23,7 +17,14 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh "docker build -t ${DOCKER_IMAGE} ."
+                // Docker CLI 가 없으면 에러 내기
+                sh '''
+                  if ! command -v docker >/dev/null; then
+                    echo "ERROR: docker CLI not found"
+                    exit 1
+                  fi
+                  docker build -t ${DOCKER_IMAGE} .
+                '''
             }
         }
 
@@ -34,8 +35,10 @@ pipeline {
                     usernameVariable: 'DOCKER_USER',
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
-                    sh "echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin"
-                    sh "docker push ${DOCKER_IMAGE}"
+                    sh '''
+                      echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+                      docker push ${DOCKER_IMAGE}
+                    '''
                 }
             }
         }
