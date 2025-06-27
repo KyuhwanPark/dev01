@@ -9,7 +9,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t parkkyuhwan/dev01:1.0 .'
+                sh '/usr/local/bin/docker build -t parkkyuhwan/dev01:1.0 .'
             }
         }
 
