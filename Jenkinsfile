@@ -9,7 +9,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t kyuhwanpark/dev01:1.0 .'
+                sh 'docker build -t parkkyuhwan/dev01:1.0 .'
             }
         }
 
@@ -17,7 +17,7 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
-                    sh 'docker push kyuhwanpark/dev01:1.0'
+                    sh 'docker push parkkyuhwan/dev01:1.0'
                 }
             }
         }
