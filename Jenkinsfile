@@ -15,7 +15,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh '/opt/homebrew/bin/docker build -t parkkyuhwan/dev01:1.0 .'
+                sh 'docker build -t parkkyuhwan/dev01:1.0 .'
             }
         }
 
